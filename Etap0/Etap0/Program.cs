@@ -1,44 +1,44 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Etap0
 {
-    
-
-    internal class Program
+    public class Program
     {
-        public void Math(double num1, double num2, string x)
+        public double Calculate(double num1, double num2, string x)
         {
+            double result = 0;
 
             // Use a switch statement to do the math.
             switch (x)
             {
                 case "a":
-                    Console.WriteLine($"Your result: {num1} + {num2} = " + (num1 + num2));
+                    result = num1 + num2;
+                    Console.WriteLine($"Your result: {num1} + {num2} = " + result);
                     break;
                 case "s":
-                    Console.WriteLine($"Your result: {num1} - {num2} = " + (num1 - num2));
+                    result = num1 - num2;
+                    Console.WriteLine($"Your result: {num1} - {num2} = " + result);
                     break;
                 case "m":
-                    Console.WriteLine($"Your result: {num1} * {num2} = " + (num1 * num2));
+                    result = num1 * num2;
+                    Console.WriteLine($"Your result: {num1} * {num2} = " + result);
                     break;
                 case "d":
                     // Ask the user to enter a non-zero divisor until they do so.
                     while (num2 == 0)
                     {
                         Console.WriteLine("Enter a non-zero divisor: ");
-                        num2 = Convert.ToInt32(Console.ReadLine());
+                        num2 = Convert.ToDouble(Console.ReadLine());
                     }
-                    Console.WriteLine($"Your result: {num1} / {num2} = " + (num1 / num2));
+                    result = num1 / num2;
+                    Console.WriteLine($"Your result: {num1} / {num2} = " + result);
                     break;
             }
 
-
-
+            return result;
         }
+
+
         static void Main(string[] args)
         {
             // Declare variables and then initialize to zero.
@@ -66,15 +66,11 @@ namespace Etap0
             string x = Console.ReadLine();
 
             var program = new Program();
-            program.Math(num1, num2, x);
-            
+            program.Calculate(num1, num2, x);
+
             // Wait for the user to respond before closing.
             Console.Write("Press any key to close the Calculator console app...");
             Console.ReadKey();
         }
-            
-
-
-        
     }
 }

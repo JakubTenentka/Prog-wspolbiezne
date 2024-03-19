@@ -1,28 +1,40 @@
 using Microsoft.VisualStudio.TestPlatform.TestHost;
+using NUnit.Framework;
+using Etap0;
 
-namespace MathTests
+
+namespace Etap0.Tests
 {
-    public class MathTests
+    [TestFixture]
+    public class ProgramTests
     {
-        private Program program { get; set; } = null!;
-
-        [SetUp]
-        public void Setup()
+        [TestCase(2, 3, "a", ExpectedResult = 5)]
+        [TestCase(5, 3, "s", ExpectedResult = 2)]
+        [TestCase(2, 3, "m", ExpectedResult = 6)]
+        [TestCase(6, 3, "d", ExpectedResult = 2)]
+        public double Math_ShouldCalculateCorrectResult(double num1, double num2, string x)
         {
-            program = new Program();
+            // Arrange
+            Program program = new Program();
+
+            // Act
+            var result = program.Calculate(num1, num2, x);
+
+            // Assert
+            return result;
         }
 
-        [Test]
-        public void Math_add_test()
+        [TestCase(2, 0, "d")]
+        public void Math_DivideByZero_ShouldPromptForNonZeroDivisor(double num1, double num2, string x)
         {
-            var num1 = 5;
-            var num2 = 5;
-            string x = "d";
+            // Arrange
+            var program = new Program();
 
-            var k = program.Math(num1, num2, x);
+            // Act
+            TestDelegate action = () => program.Calculate(num1, num2, x);
 
-
-            Assert.Pass();
+            // Assert
+            Assert.That(action, Throws.Exception.TypeOf<DivideByZeroException>());
         }
     }
 }
