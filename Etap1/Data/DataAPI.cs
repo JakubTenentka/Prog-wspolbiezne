@@ -6,7 +6,7 @@ public class DataAPI : DataAbstractAPI
     {
         radius = 10;
         maxspeed = 10;
-        Backgroundwidth = 600;
+        Backgroundwidth = 405;
         Backgroundheight = 600;
         color = "#FF0000";
     }
