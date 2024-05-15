@@ -1,6 +1,8 @@
 using System.Collections.ObjectModel;
 using DataNS;
 using LogicNS;
+using NUnit.Framework;
+using Ball = LogicNS.Ball;
 
 namespace Tests;
 
@@ -24,14 +26,17 @@ public class LogicAbstractApiTest
     [Test]
     public void CreateBallsTest()
     {
-        Assert.AreEqual(5, logicAbstractApi.CreateBalls(5).Count);
+
+        Assert.AreEqual(0, logicAbstractApi.generateBallsList().Count);
     }
 
     [Test]
-    public void UpdateBallsTest()
+    public void StartAndStopAnimatingTest()
     {
-        Assert.AreEqual(logicAbstractApi.CreateBalls(3).Count,
-            logicAbstractApi.UpdateBalls(logicAbstractApi.CreateBalls(3)).Count);
+        logicAbstractApi.Start();
+        Assert.AreEqual(true, logicAbstractApi.Animating);
+        logicAbstractApi.Stop();
+        Assert.AreEqual(false, logicAbstractApi.Animating);
     }
 
 }

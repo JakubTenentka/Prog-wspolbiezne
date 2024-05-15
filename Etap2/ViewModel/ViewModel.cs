@@ -11,11 +11,9 @@ namespace ViewModelNS
     {
         public int WindowHeight { get; }
         public int WindowWidth { get; }
-
         public ICommand StartCommand { get; set; }
         public ICommand StopCommand { get; set; }
         public event PropertyChangedEventHandler? PropertyChanged;
-
 
         private int _count;
         public int Count
@@ -30,22 +28,16 @@ namespace ViewModelNS
 
         private Model model { get; set; }
 
-        private ObservableCollection<Ball> balls;
-        public ObservableCollection<Ball> Balls
+        public ObservableCollection<ModelNS.Ball> Balls
         {
-            get => balls;
-            set
-            {
-                balls = value;
-                OnPropertyChanged();
-            }
+            get { return model.Balls; }
         }
+
         public ViewModel()
         {
-            balls = new();
             model = new Model();
-            WindowWidth = model.Backgroundwidth;
-            WindowHeight = model.Backgroundheight;
+            WindowWidth = model.canvasWidth;
+            WindowHeight = model.canvasHeight;
             StartCommand = new Commands(Start);
             StopCommand = new Commands(Stop);
         }
@@ -53,21 +45,15 @@ namespace ViewModelNS
         private void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-
         }
-        private async void Start()
+        private void Start()
         {
-            Balls = model.GetStartingCirclePositions(Count);
-            while (model.IsAnimating)
-            {
-                await Task.Delay(10);
-                Balls = model.MoveCircle(balls);
-            }
+            Balls.Clear();
+            model.GetStartingCirclePositions(Count);
         }
         private void Stop()
         {
-            model.IsAnimating = false;
+            model.StopAnimation();
         }
     }
 }
-
