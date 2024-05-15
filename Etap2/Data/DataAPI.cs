@@ -9,7 +9,7 @@ public class DataAPI : DataAbstractAPI
         maxWeight = 10;
         radius = 10;
         maxspeed = 5;
-        Backgroundwidth = 410;
+        Backgroundwidth = 400;
         Backgroundheight = 600;
         color = "#FF0000";
     }
