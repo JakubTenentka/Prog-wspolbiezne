@@ -1,4 +1,7 @@
 ﻿using DataNS;
+using System.Diagnostics;
+using System.Timers;
+
 
 namespace LogicNS;
 
@@ -7,6 +10,8 @@ public class LogicAPI : LogicAbstractAPI
 {
     private readonly DataAbstractAPI? dataAPI;
     private int roundCounter = 0;
+    private static System.Timers.Timer aTimer;
+    private Logger logger = Logger.createLogger();
 
     public LogicAPI(DataAbstractAPI dataAPI)
     {
@@ -15,8 +20,26 @@ public class LogicAPI : LogicAbstractAPI
         BackgroundWidth = this.dataAPI.Backgroundwidth;
     }
 
+    private void SetTimer()
+    {
+        aTimer = new System.Timers.Timer(2000);
+        aTimer.Elapsed += OnTimedEvent;
+        aTimer.AutoReset = true;
+        aTimer.Enabled = true;
+    }
+
+    private void OnTimedEvent(Object source, ElapsedEventArgs e)
+    {
+        foreach (var ball in dataAPI.Balls)
+        {
+            logger.prepareDataToSave(ball.id, ball.X, ball.Y, ball.speedX, ball.speedY);
+        }
+    }
+
+
     public override void CreateBalls(int amountOfBalls)
     {
+
         roundCounter++;
         DataNS.Ball.counter = 0;
         dataAPI.Balls.Clear();
@@ -24,8 +47,12 @@ public class LogicAPI : LogicAbstractAPI
         {
             dataAPI.Balls.Add(dataAPI.createBall());
         }
+        
+
         foreach (var ball in dataAPI.Balls)
         {
+            SetTimer();
+
             Task.Run(async () =>
             {
                 int round = roundCounter;
@@ -79,6 +106,7 @@ public class LogicAPI : LogicAbstractAPI
                     await Task.Delay(10);
                 }
             });
+
         }
     }
 
@@ -141,10 +169,13 @@ public class LogicAPI : LogicAbstractAPI
     public override void Start()
     {
         Animating = true;
+        logger.initFile();
     }
 
     public override void Stop()
     {
         Animating = false;
+        aTimer.Stop();
+        aTimer.Dispose();
     }
 }
